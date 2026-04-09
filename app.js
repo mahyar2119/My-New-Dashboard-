@@ -1,5 +1,6 @@
 /* ============================================================
-   Opofinance Support Dashboard — app.js
+   Opofinance Support Dashboard
+   app.js — all interactivity and button logic
    ============================================================ */
 
 'use strict';
@@ -8,43 +9,60 @@
    SCREEN NAVIGATION
    ============================================================ */
 
+/**
+ * Hide all screens and show the one with the given id.
+ * @param {string} id - The id of the screen to show.
+ */
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(function (s) {
-    s.classList.remove('active');
+  document.querySelectorAll('.screen').forEach(function (screen) {
+    screen.classList.remove('active');
   });
+
   var target = document.getElementById(id);
-  if (target) target.classList.add('active');
+  if (target) {
+    target.classList.add('active');
+  }
 }
 
 /* ============================================================
-   LOGIN
+   AUTH — LOGIN
    ============================================================ */
 
 function initLogin() {
-  document.getElementById('login-btn').addEventListener('click', function () {
+  var loginBtn = document.getElementById('login-btn');
+  if (!loginBtn) return;
+
+  loginBtn.addEventListener('click', function () {
     var email    = document.getElementById('login-email').value.trim();
     var password = document.getElementById('login-password').value.trim();
+
     if (!email || !password) {
       alert('Please enter your email and password.');
       return;
     }
+
     showScreen('dashboard-screen');
   });
 }
 
 /* ============================================================
-   SIGN UP
+   AUTH — SIGN UP
    ============================================================ */
 
 function initSignup() {
-  document.getElementById('signup-btn').addEventListener('click', function () {
+  var signupBtn = document.getElementById('signup-btn');
+  if (!signupBtn) return;
+
+  signupBtn.addEventListener('click', function () {
     var name     = document.getElementById('signup-name').value.trim();
     var email    = document.getElementById('signup-email').value.trim();
     var password = document.getElementById('signup-password').value.trim();
+
     if (!name || !email || !password) {
       alert('Please fill in all fields.');
       return;
     }
+
     showScreen('dashboard-screen');
   });
 }
@@ -54,7 +72,10 @@ function initSignup() {
    ============================================================ */
 
 function initLogout() {
-  document.getElementById('logout-btn').addEventListener('click', function () {
+  var logoutBtn = document.getElementById('logout-btn');
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener('click', function () {
     showScreen('login-screen');
   });
 }
@@ -64,16 +85,23 @@ function initLogout() {
    ============================================================ */
 
 function initSwitchLinks() {
-  document.getElementById('go-signup').addEventListener('click', function () {
-    showScreen('signup-screen');
-  });
-  document.getElementById('go-login').addEventListener('click', function () {
-    showScreen('login-screen');
-  });
+  var goSignup = document.getElementById('go-signup');
+  if (goSignup) {
+    goSignup.addEventListener('click', function () {
+      showScreen('signup-screen');
+    });
+  }
+
+  var goLogin = document.getElementById('go-login');
+  if (goLogin) {
+    goLogin.addEventListener('click', function () {
+      showScreen('login-screen');
+    });
+  }
 }
 
 /* ============================================================
-   SIDEBAR NAV — active state
+   SIDEBAR NAVIGATION — active state
    ============================================================ */
 
 function initNavItems() {
@@ -88,13 +116,26 @@ function initNavItems() {
 }
 
 /* ============================================================
+   INIT — run everything on DOM ready
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', function () {
+  initLogin();
+  initSignup();
+  initLogout();
+  initSwitchLinks();
+  initNavItems();
+  initThemeToggle();
+});
+
+/* ============================================================
    DARK / LIGHT MODE TOGGLE
    ============================================================ */
 
 function initThemeToggle() {
-  var btn    = document.getElementById('theme-toggle');
-  var icon   = btn.querySelector('.toggle-icon');
-  var label  = btn.querySelector('.toggle-label');
+  var btn   = document.getElementById('theme-toggle');
+  var icon  = btn.querySelector('.toggle-icon');
+  var label = btn.querySelector('.toggle-label');
   var isDark = false;
 
   btn.addEventListener('click', function () {
@@ -111,16 +152,3 @@ function initThemeToggle() {
     }
   });
 }
-
-/* ============================================================
-   INIT — run all on DOM ready
-   ============================================================ */
-
-document.addEventListener('DOMContentLoaded', function () {
-  initLogin();
-  initSignup();
-  initLogout();
-  initSwitchLinks();
-  initNavItems();
-  initThemeToggle();
-});
